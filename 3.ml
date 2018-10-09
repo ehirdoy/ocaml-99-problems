@@ -14,15 +14,13 @@ REMARK: OCaml has List.nth which numbers elements from 0 and raises an exception
 Exception: Failure "nth".
 *)
 
-exception End_of_index
-
 let rec nth lst n =
   match lst with
-  | [] -> raise End_of_index
+  | [] -> None
   | x :: xs ->
-    if n = 0 then x
+    if n = 0 then Some x
     else if n > 0 then nth xs (n - 1)
-    else raise End_of_index
+    else None
 
-let test = nth [ "a" ; "b"; "c"; "d"; "e" ] 2 = "c"
-let test = nth [ "a" ] 2
+let test = nth [ "a" ; "b"; "c"; "d"; "e" ] 2 = Some "c"
+let test = nth [ "a" ] 2 = None
