@@ -3,10 +3,8 @@
         HINT: a palindrome is its own reverse.
 *)
 
-#use "5.ml"
-
 let is_palindrome lst =
-  lst = (rev lst)
+  lst = List.rev lst
 
 (*
 # is_palindrome [ "x" ; "a" ; "m" ; "a" ; "x" ];;
