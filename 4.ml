@@ -5,10 +5,11 @@
         Bonus for a tail recursive solution.
 *)
 
-let rec length = function
-  | [] -> 0
-  | x :: xs -> 1 + length xs
+let length lst =
+  let rec aux n = function
+    | [] -> n
+    | x :: xs -> aux (n+1) xs
+  in aux 0 lst
 
 let test = length [ "a" ; "b" ; "c"] = 3
 let test = length [] = 0
-
