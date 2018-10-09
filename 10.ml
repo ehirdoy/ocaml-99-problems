@@ -1,14 +1,14 @@
 (* 10. Run-length encoding of a list. (easy) *)
 
 let encode lst =
-  let rec aux tmp acc src = match src with
+  let rec aux num acc src = match src with
     | [] -> []
-    | [x] -> (List.length (x::tmp), x)::acc
+    | [x] -> (num+1, x)::acc
     | x::(x'::_ as t) ->
-      if x = x' then aux (x::tmp) acc t
-      else aux [] ((List.length (x::tmp),  x)::acc) t
+      if x = x' then aux (num+1) acc t
+      else aux 0 ((num+1,  x)::acc) t
   in
-  List.rev (aux [] [] lst)
+  List.rev (aux 0 [] lst)
 
 let test = encode [] = []
 let test = encode ["a"] = [(1, "a")]
