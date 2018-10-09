@@ -3,9 +3,9 @@
 *)
 
 let rec last_two = function
-  | [] -> None | x :: [] -> None
-  | x :: y :: [] -> Some (x, y)
-  | x :: y :: xs -> last_two xs
+  | [] -> None | [_] -> None
+  | [x;y] -> Some (x, y)
+  | _ :: xs -> last_two xs
 
 let test = last_two [] = None
 let test = last_two ["a"] = None
