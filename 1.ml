@@ -6,11 +6,12 @@
 let rec last = function
   | [] -> None
   | x :: [] -> Some x
-  | x::xs -> last xs
+  | _ :: xs -> last xs
 
 let test = last [] = None
-let test = last [1] = Some (1)
-let test = last [2;1] = Some (1)
-let test = last [3;1;2] = Some (2)
+let test = last [1] = Some 1
+let test = last [2;1] = Some 1
+let test = last [3;1;2] = Some 2
+let test = last ["a";"b";"c";"d"] = Some "d"
 
 
