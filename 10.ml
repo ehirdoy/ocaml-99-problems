@@ -1,14 +1,9 @@
 (* 10. Run-length encoding of a list. (easy) *)
 
+#use "9.ml"
+
 let encode lst =
-  let rec aux num acc src = match src with
-    | [] -> []
-    | [x] -> (num+1, x)::acc
-    | x::(x'::_ as t) ->
-      if x = x' then aux (num+1) acc t
-      else aux 0 ((num+1,  x)::acc) t
-  in
-  List.rev (aux 0 [] lst)
+  List.map (fun l -> (List.length l, List.hd l)) (pack lst)
 
 let test = encode [] = []
 let test = encode ["a"] = [(1, "a")]
