@@ -4,11 +4,11 @@
 *)
 
 let rev lst =
-  let rec __rev xs ys = match xs with
-    | [] -> ys
-    | x' :: xs' -> __rev xs' (x'::ys)
+  let rec aux xs acc = match xs with
+    | [] -> acc
+    | x' :: xs' -> aux xs' (x'::acc)
   in
-  __rev lst []
+  aux lst []
 
 (*
 # rev ["a" ; "b" ; "c"];;
