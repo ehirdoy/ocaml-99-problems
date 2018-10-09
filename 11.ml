@@ -8,17 +8,22 @@ Since OCaml lists are homogeneous,
 one needs to define a type to hold both single elements and sub-lists.
 *)
 
-#use "9.ml"
-
 type 'a rle = One of 'a | Many of int * 'a
 
 let encode lst =
-  let f l =
-    let len = List.length l in
-    if len = 1 then One (List.hd l) else Many (List.length l, List.hd l)
+  let to_tuple n el =
+    if n = 1 then One el else Many (n, el) in
+  let rec aux num acc src = match src with
+    | [] -> []
+    | [x] -> (to_tuple (num+1) x)::acc
+    | x::(x'::_ as t) ->
+      if x = x' then aux (num+1) acc t
+      else aux 0 ((to_tuple (num+1) x)::acc) t
   in
-  List.map f (pack lst)
+  List.rev (aux 0 [] lst)
 
+let test = encode [] = []
+let test = encode ["a"] = [One "a"]
 let test =
   encode ["a";"a";"a";"a";"b";"c";"c";"a";"a";"d";"e";"e";"e";"e"] =
   [Many (4, "a"); One "b"; Many (2, "c"); Many (2, "a"); One "d";
