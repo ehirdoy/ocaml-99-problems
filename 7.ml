@@ -8,11 +8,13 @@ type 'a node =
   | Many of 'a node list;;
 type 'a node = One of 'a | Many of 'a node list
 
-let rec flatten = function
-  | [] -> []
-  | [One x] -> [x]
-  | One x :: xs -> x :: flatten xs
-  | Many xs :: ys -> flatten xs @ flatten ys
+let flatten lst =
+  let rec aux acc = function
+    | [] -> acc
+    | One x :: xs -> aux (x :: acc) xs
+    | Many xs :: ys -> aux (aux acc xs) ys
+  in
+  List.rev (aux [] lst)
 
 let test =
   flatten [ One "a" ; Many [ One "b" ; Many [ One "c" ; One "d" ] ; One "e" ] ] =
