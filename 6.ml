@@ -5,16 +5,8 @@
 
 #use "5.ml"
 
-exception Fatal
-
 let is_palindrome lst =
-  let rec is_equal xs ys = match xs with
-    | [] -> true
-    | x'::xs' -> match ys with
-      | [] -> raise Fatal
-      | y'::ys' -> if x' = y' then is_equal xs' ys' else false
-  in
-  is_equal lst (rev lst)
+  lst = (rev lst)
 
 (*
 # is_palindrome [ "x" ; "a" ; "m" ; "a" ; "x" ];;
