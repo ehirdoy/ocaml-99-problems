@@ -3,8 +3,6 @@
 let replicate lst num =
   let rec aux count acc = function
     | [] -> acc
-    | [x] ->
-      if count = 1 then x::acc else aux (count-1) (x::acc) [x]
     | x::xs ->
       if count = 1 then aux num (x::acc) xs else aux (count-1) (x::acc) (x::xs)
   in
