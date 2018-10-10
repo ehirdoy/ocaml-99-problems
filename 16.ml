@@ -1,10 +1,11 @@
 (* 16. Drop every N'th element from a list. (medium) *)
 
 let drop lst num =
-  let f (idx, acc) el =
-    if idx = num then (1, acc) else (idx+1, el::acc) in
-  match List.fold_left f (1, []) lst with
-  | _, acc -> List.rev acc
+  let rec aux i = function
+    | [] -> []
+    | x::xs -> if i = num then aux 1 xs else x :: aux (i+1) xs
+  in
+  aux 1 lst
 
 let test1 = drop [] 3 = []
 let test2 = drop ["a"] 3 = ["a"]
