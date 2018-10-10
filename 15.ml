@@ -1,9 +1,9 @@
 (* 15. Replicate the elements of a list a given number of times. (medium) *)
 
 let replicate lst num =
-  let rec prepend n acc x =
-    if n = 0 then acc else prepend (n - 1) (x::acc) x in
-  List.fold_right  (fun el accu -> prepend num accu el) lst []
+  let rec prepend n x acc =
+    if n = 0 then acc else prepend (n - 1) x (x::acc) in
+  List.fold_right (prepend num) lst []
 
 let test = replicate [] 3 = []
 let test = replicate ["a"] 2 = ["a";"a"]
