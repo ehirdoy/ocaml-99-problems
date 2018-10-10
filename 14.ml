@@ -1,11 +1,8 @@
 (* 14. Duplicate the elements of a list. (easy) *)
 
-let duplicate lst =
-  let rec aux acc = function
-    | [] -> acc
-    | x::xs -> aux (x::x::acc) xs
-  in
-  List.rev (aux [] lst)
+let rec duplicate = function
+  | [] -> []
+  | x::xs ->  x::x::(duplicate xs)
 
 let test = duplicate [] = []
 let test = duplicate ["a"] = ["a";"a"]
