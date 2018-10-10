@@ -6,7 +6,7 @@ let replicate lst num =
     | x::xs ->
       if count = 1 then aux num (x::acc) xs else aux (count-1) (x::acc) (x::xs)
   in
-  List.rev (aux num [] lst)
+  aux num [] (List.rev lst)
 
 let test = replicate [] 3 = []
 let test = replicate ["a"] 2 = ["a";"a"]
