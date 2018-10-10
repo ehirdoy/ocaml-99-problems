@@ -6,13 +6,13 @@
  * (this is the way the List module numbers elements). *)
 
 let slice lst i k =
-  let rec skip n = function
-    | [] -> []
-    | x::xs -> if n = 0 then x::xs else skip (n-1) xs in
-  let rec take n = function
-    | [] -> []
-    | x::xs -> if n = 0 then [] else x :: take (n-1) xs in
-  skip i lst |> take (k-i+1)
+  let rec skip n acc = function
+    | [] -> acc
+    | x::xs -> if n = 0 then acc else skip (n-1) xs xs in
+  let rec take n acc = function
+    | [] -> acc
+    | x::xs -> if n = 0 then acc else x :: take (n-1) acc xs in
+  skip i [] lst |> take (k-i+1) []
 
 let test = slice [] 2 6 = []
 let test = slice ["a"] 2 6 = []
