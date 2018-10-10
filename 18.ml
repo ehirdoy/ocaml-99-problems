@@ -7,13 +7,13 @@
 
 
 let slice lst i k =
-  let rec skip n acc = function
-    | [] -> acc
-    | x::xs -> if n = 0 then xs else skip (n-1) xs xs in
+  let rec skip n = function
+    | [] -> []
+    | x::xs -> if n = 0 then xs else skip (n-1) xs in
   let rec take n acc = function
     | [] -> acc
     | x::xs -> if n = 0 then acc else take (n-1) (x::acc) xs in
-  skip (i-1) [] lst
+  skip (i-1) lst
   |> take (k-i+1) []
   |> List.rev
 
