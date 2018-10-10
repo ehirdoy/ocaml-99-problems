@@ -2,7 +2,7 @@
 
 let drop lst num =
   let f (idx, acc) el =
-    if (idx mod num) = 0 then (idx+1, acc) else (idx+1, el::acc) in
+    if idx = num then (1, acc) else (idx+1, el::acc) in
   match List.fold_left f (1, []) lst with
   | _, acc -> List.rev acc
 
