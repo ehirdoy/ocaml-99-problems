@@ -2,13 +2,10 @@
  *
  * The first element of the list is numbered 0, the second 1,... *)
 
-let remove_at nth lst =
-  let rec aux n acc l = match l with
-    | [] -> List.rev acc @ l
-    | x::xs ->
-      if n = 0 then (List.rev acc) @ xs else aux (n-1) (x::acc) xs
-  in
-  aux nth [] lst
+let rec remove_at nth = function
+  | [] -> []
+  | x::xs ->
+    if nth = 0 then xs else x :: remove_at (nth - 1) xs
 
 let test = remove_at 1 [] = []
 let test = remove_at 0 ["a"] = []
