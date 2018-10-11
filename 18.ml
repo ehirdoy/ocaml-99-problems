@@ -8,20 +8,10 @@
 let slice lst i k =
   let rec skip n acc = function
     | [] -> acc
-    | x::xs ->
-      if n = 0 then acc
-      else
-        let acc = xs in
-        skip (n-1) acc xs
-  in
+    | x::xs -> if n = 0 then acc else skip (n-1) xs xs in
   let rec take n acc = function
     | [] -> acc
-    | x::xs ->
-      if n = 0 then acc
-      else
-        let acc = acc @ [x] in
-        take (n-1) acc xs
-  in
+    | x::xs -> if n = 0 then acc else x :: take (n-1) acc xs in
   skip i [] lst |> take (k-i+1) []
 
 let test = slice [] 2 6 = []
