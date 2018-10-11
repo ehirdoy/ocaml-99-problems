@@ -11,8 +11,8 @@ let slice lst i k =
     | x::xs -> if n = 0 then acc else skip (n-1) xs xs in
   let rec take n acc = function
     | [] -> acc
-    | x::xs -> if n = 0 then acc else x :: take (n-1) acc xs in
-  skip i [] lst |> take (k-i+1) []
+    | x::xs -> if n = 0 then acc else take (n-1) (x::acc) xs in
+  skip i [] lst |> take (k-i+1) [] |> List.rev
 
 let test = slice [] 2 6 = []
 let test = slice ["a"] 2 6 = []
