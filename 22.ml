@@ -2,10 +2,11 @@
  *
  * If first argument is greater than second, produce a list in decreasing order. *)
 
-let rec range s e =
-  if s < e then s::range (s+1) e
-  else if s = e then [s]
-  else s::range (s-1) e
+let range s e =
+  let rec aux high low =
+    if high > low then high :: aux (high - 1) low else [low]
+  in
+  if s < e then List.rev (aux e s) else aux s e
 
 let test = range 1 1 = [1]
 let test = range 4 9
