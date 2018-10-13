@@ -30,14 +30,27 @@ let test = length_sort [["a";"b";"c"];
               ["f"; "g"; "h"];
               ["i"; "j"; "k"; "l"]]
 
-(*
- [(4, (*1 times*) [["i";"j";"k";"l"]]);
-  (1, (*1 times*) [["o"]])
-  (3, (*2 times*) [["a";"b";"c"]; ["f";"g";"h"]]);
-  (2, (*3 times*) [["d";"e"]; ["d";"e"]; ["m";"n"]])]
-*)
-let frequency_sort list =
-[]
+
+(* Sorting according to length frequency : prepend frequency, sort,
+   remove frequency. Frequencies are extracted by sorting lengths
+   and applying RLE to count occurences of each length (see problem
+   "Run-length encoding of a list.") *)
+let rle list =
+  let rec aux count acc = function
+    | [] -> [] (* Can only be reached if original list is empty *)
+    | [x] -> (x, count + 1) :: acc
+    | a :: (b :: _ as t) ->
+      if a = b then aux (count + 1) acc t
+      else aux 0 ((a, count + 1) :: acc) t in
+  aux 0 [] list
+
+
+let frequency_sort lists =
+  let lengths = List.map List.length lists in
+  let freq = rle (List.sort compare lengths) in
+  List.map (fun list -> List.assoc (List.length list) freq , list) lists
+  |> List.sort (fun a b -> compare (fst a) (fst b))
+  |> List.map snd
 
 let test = frequency_sort [["a";"b";"c"];
                            ["d";"e"];
@@ -46,10 +59,10 @@ let test = frequency_sort [["a";"b";"c"];
                            ["i";"j";"k";"l"];
                            ["m";"n"];
                            ["o"]]
-           (* = [["i"; "j"; "k"; "l"]; (\* 4:1 *\)
-            *    ["o"];                (\* 1:1 *\)
-            *    ["a"; "b"; "c"];      (\* 3:2 *\)
-            *    ["f"; "g"; "h"];      (\* 3:2 *\)
-            *    ["d"; "e"];           (\* 2:2 *\)
-            *    ["d"; "e"];           (\* 2:2 *\)
-            *    ["m"; "n"]]           (\* 2:2 *\) *)
+           = [["i"; "j"; "k"; "l"]; (* 4:1 *)
+              ["o"];                (* 1:1 *)
+              ["a"; "b"; "c"];      (* 3:2 *)
+              ["f"; "g"; "h"];      (* 3:2 *)
+              ["d"; "e"];           (* 2:2 *)
+              ["d"; "e"];           (* 2:2 *)
+              ["m"; "n"]]           (* 2:2 *)
