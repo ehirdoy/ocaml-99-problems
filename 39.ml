@@ -3,10 +3,6 @@
  * Given a range of integers by its lower and upper limit,
  * construct a list of all prime numbers in that range. *)
 
-let seq n0 n1 =
-  let rec aux acc x = if x = n1 then acc else aux (x :: acc) (x+1) in
-  aux [] n0
-
 let is_prime n =
   let rec is_not_divisor d =
     if d = n then true
@@ -15,8 +11,9 @@ let is_prime n =
   in
   n != 1 && is_not_divisor 2
 
-let all_primes n0 n1 =
-  List.fold_left (fun acc el -> if is_prime el then el::acc else acc) [] (seq n0 n1)
+let rec all_primes n0 n1 =
+  if n0 > n1 then [] else
+  if is_prime n0 then n0 :: (all_primes (n0+1) n1) else (all_primes (n0+1) n1)
 
 let test = List.length (all_primes 2 7920)
            = 1000
