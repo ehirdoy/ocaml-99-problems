@@ -14,6 +14,7 @@ let rec seq a b =
   if a > b then [] else (a :: (seq (a+2) b))
 
 let rec goldbach_list a b =
+  if a > b then [] else
   if a mod 2 = 1 then goldbach_list (a+1) b
   else (a, (goldbach a)) :: (goldbach_list (a+2) b)
 
