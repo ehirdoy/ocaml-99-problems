@@ -29,31 +29,23 @@ type bool_expr =
   | And of bool_expr * bool_expr
   | Or of bool_expr * bool_expr
 
-(* val eval2 :
-   string -> bool -> string -> bool -> bool_expr -> bool
-   = <fun> *)
-let rec eval2 a val_a b val_b = function
-  | Var x ->
-    if x = a then val_a
-    else if x = b then val_b
-    else failwith "The expression contains an invalid variable"
-  | Not e -> not (eval2 a val_a b val_b e)
-  | And (e1, e2) -> eval2 a val_a b val_b e1 && eval2 a val_a b val_b e2
-  | Or (e1, e2) -> eval2 a val_a b val_b e1 || eval2 a val_a b val_b e2
+let rec eval2 conf = function
+  | Var x -> List.assoc x conf
+  | Not e -> not (eval2 conf e)
+  | And (e1, e2) -> eval2 conf e1 && eval2 conf e2
+  | Or (e1, e2) -> eval2 conf e1 || eval2 conf e2
 
-(* val table2 :
-   string -> string -> bool_expr -> (bool * bool * bool) list
-   = <fun> *)
-let table2 a b expr =
-  [(true,  true,  eval2 a true  b true  expr);
-   (true,  false, eval2 a true  b false expr);
-   (false, true,  eval2 a false b true  expr);
-   (false, false, eval2 a false b false expr)]
+let rec create_table = function
+  | [] -> [[]]
+  | x :: xs ->
+    let prepend x l = List.map (fun el -> x :: el) l in
+    let rest = create_table xs in
+    (prepend (x, true) rest) @ (prepend (x, false) rest)
 
-let test = table2 "x" "y" (Var "x")
+let table2 vars expr =
+  create_table vars |> List.map (fun el -> (el, (eval2 el expr)))
 
-let test = table2 "a" "b" (And (Var "a", Or (Var "a", Var "b")))
-           (* = [(true, true, true); (true, false, true); (false, true, false);
-            *    (false, false, false)] *)
-let test = table2 "a" "b" (Or (Var "a", Or (Var "a", Var "b")))
-let test = table2 "a" "b" (And (Var "a", And (Var "a", Var "b")))
+let test1 = table2 ["x";"y"] (Var "x")
+let test2 = table2 ["a";"b"] (And (Var "a", Or (Var "a", Var "b")))
+let test3 = table2 ["a";"b"] (Or (Var "a", Or (Var "a", Var "b")))
+let test4 = table2 ["a";"b"] (And (Var "a", And (Var "a", Var "b")))
