@@ -8,16 +8,16 @@ type 'a rle =
   | Many of int * 'a
 
 let decode lst =
-  let rec rep n x base =
-    if n = 1 then x::base else rep (n-1) x (x::base)
-  in
-  let rec aux acc = function
-    | [] -> acc
-    | x :: xs -> match x with
-      | One x -> aux (x::acc) xs
-      | Many (n, x) -> aux (rep n x acc) xs
-  in
-  List.rev (aux [] lst)
+  List.fold_right (fun el acc ->
+      match el with
+      | One x -> x::acc
+      | Many (n, ch) ->
+        let rec aux acc = function
+          | 0 -> acc
+          | n -> aux (ch::acc) (n-1)
+        in
+        aux acc n
+    ) lst []
 
 let test =
   decode [Many (4,"a"); One "b"; Many (2,"c"); Many (2,"a"); One "d"; Many (4,"e")]
