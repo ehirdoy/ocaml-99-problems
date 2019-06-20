@@ -5,15 +5,14 @@ then the first part is the list and the second part is empty.
 
 *)
 
-let split lst num =
-  let rec aux acc n = function
-    | [] -> (List.rev acc, [])
-    | x::xs ->
-      if n > num then (x::xs, [])
-      else if n = num then (List.rev acc, x::xs)
-      else aux (x::acc) (n+1) xs
+let split list number =
+  let rec aux first = function
+    | [] -> (List.rev first, [])
+    | x::xs when List.length first = number -> (List.rev first, x::xs)
+    | x::xs when List.length first < number -> aux (x::first) xs
+    | _ (*when List.length first > number*) -> assert false
   in
-  aux [] 0 lst
+  aux [] list
 
 let test1 = split [] 3 = ([], [])
 let test2 = split ["a"] 3 = (["a"], [])
