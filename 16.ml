@@ -1,11 +1,13 @@
 (* 16. Drop every N'th element from a list. (medium) *)
 
-let drop lst num =
-  let rec aux i = function
+let drop list number =
+  let rec aux counter = function
     | [] -> []
-    | x::xs -> if i = num then aux 1 xs else x :: aux (i+1) xs
+    | x::xs -> match counter with
+      | 1 -> aux number xs
+      | _ -> x :: aux (counter-1) xs
   in
-  aux 1 lst
+  aux number list
 
 let test1 = drop [] 3 = []
 let test2 = drop ["a"] 3 = ["a"]
