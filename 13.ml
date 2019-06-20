@@ -14,23 +14,29 @@ type 'a rle =
   | One of 'a
   | Many of int * 'a
 
+let rle x = function
+  | 0 -> One x
+  | n -> Many (n+1, x)
+
+let test02 = rle "a" 0 = One "a"
+let test03 = rle "a" 2 = Many (3, "a")
+
 let encode lst =
-  let rle count x = if count = 0 then One x else Many ((count + 1), x) in
   let rec aux count acc = function
     | [] -> acc
-    | [x] -> (rle count x)::acc
+    | [x] -> (rle x count)::acc
     | x::(x'::_ as t) ->
       if x = x' then aux (count+1) acc t
-      else aux 0 ((rle count x)::acc) t
+      else aux 0 ((rle x count)::acc) t
   in
   aux 0 [] lst
   |> List.rev
 
-let test = encode [] = []
-let test = encode ["a"] = [One "a"]
-let test = encode ["a";"a"] = [Many (2, "a")]
-let test = encode ["a";"a";"b"] = [Many (2, "a"); One "b"]
-let test = encode ["b";"a";"a"] = [One "b"; Many (2, "a")]
-let test =
+let test11 = encode [] = []
+let test12 = encode ["a"] = [One "a"]
+let test13 = encode ["a";"a"] = [Many (2, "a")]
+let test14 = encode ["a";"a";"b"] = [Many (2, "a"); One "b"]
+let test15 = encode ["b";"a";"a"] = [One "b"; Many (2, "a")]
+let test16 =
   encode ["a";"a";"a";"a";"b";"c";"c";"a";"a";"d";"e";"e";"e";"e"]
   = [Many (4, "a"); One "b"; Many (2, "c"); Many (2, "a"); One "d"; Many (4, "e")]
