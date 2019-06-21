@@ -11,10 +11,11 @@
  *)
 
 let rec extract k list =
-  if k <= 0 then [[]]
-  else match list with
-    | [] -> []
-    | x :: xs ->
+  match k, list with
+  | k, l when k = 0 -> [[]]
+  | k, l when k < 0 -> assert false
+  | k, [] (* when k < 0 *) -> []
+  | k, x :: xs ->
       let with_x = List.map (fun l -> x :: l) (extract (k-1) xs) in
       let without_x = extract k xs in
       with_x @ without_x
