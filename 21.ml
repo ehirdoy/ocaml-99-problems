@@ -5,10 +5,10 @@
  * insert the element at the end.
  * (The behavior is unspecified if the position is negative.) *)
 
-let rec insert_at s nth = function
-  | [] -> [s]
-  | x::xs as l ->
-    if nth = 0 then s::l else x :: insert_at s (nth - 1) xs
+let rec insert_at el nth list = match nth, list with
+  | _, [] -> [el]
+  | 0, l -> el::l
+  | nth, x::xs -> x :: insert_at el (nth - 1) xs
 
 let test = insert_at "xxxxx" 0 [] = ["xxxxx"]
 let test = insert_at "xxxxx" 3 [] = ["xxxxx"]
